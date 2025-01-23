@@ -1,5 +1,5 @@
 # @param {enum{1,2}} [enumString] enumString test where a string is parsed by crd into an integer in the generated CRD
-enumString: 1
+enumString: "1"
 
 # @param {object} [argocd] argocd Test for preserving fields order instead of alphabetical order
 argocd:
