@@ -35,9 +35,6 @@
       "properties": {
         "metrics": {
           "type": "array",
-          "default": [
-            ""
-          ],
           "title": "metrics Test for array not in root of the form",
           "items": {
             "type": [
@@ -49,9 +46,6 @@
     },
     "metrics": {
       "type": "array",
-      "default": [
-        ""
-      ],
       "title": "metrics Test for array in root of the form",
       "items": {
         "type": [
