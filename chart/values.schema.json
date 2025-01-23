@@ -11,8 +11,7 @@
         "1",
         "2"
       ],
-      "title": "enumString test where a string is parsed by crd into an integer in the generated CRD",
-      "default": "1"
+      "title": "enumString test where a string is parsed by crd into an integer in the generated CRD"
     },
     "argocd": {
       "type": "object",
