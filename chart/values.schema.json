@@ -11,18 +11,18 @@
         "1",
         "2"
       ],
-      "title": "enumString test where a string is parsed by crd into an integer in the generated CRD"
+      "description": "enumString test where a string is parsed by crd into an integer in the generated CRD"
     },
     "argocd": {
       "type": "object",
-      "title": "argocd Test for preserving fields order instead of alphabetical order",
+      "description": "argocd Test for preserving fields order instead of alphabetical order",
       "required": [],
       "properties": {
         "namespace": {
           "type": [
             "string"
           ],
-          "title": "namespace Test for preserving fields order instead of alphabetical order",
+          "description": "namespace Test for preserving fields order instead of alphabetical order",
           "default": "krateo-system"
         }
       }
@@ -34,7 +34,7 @@
       "properties": {
         "metrics": {
           "type": "array",
-          "title": "metrics Test for array not in root of the form",
+          "description": "metrics Test for array not in root of the form",
           "items": {
             "type": [
               "string"
@@ -45,7 +45,7 @@
     },
     "metrics": {
       "type": "array",
-      "title": "metrics Test for array in root of the form",
+      "description": "metrics Test for array in root of the form",
       "items": {
         "type": [
           "string"

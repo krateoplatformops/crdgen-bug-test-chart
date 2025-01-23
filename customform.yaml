@@ -31,7 +31,7 @@ spec:
       content: This is a card for crdgen bug test template (custom form)
       icon: fa-cubes
       tags: crdgen-bug-test-system,0.0.1
-      title: FireworksApp
+      title: CRDGEN template  
       status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
       date: ${ .getCompositionDefinition.metadata.creationTimestamp }
   propsRef:
@@ -71,6 +71,11 @@ spec:
         apiVersion: composition.krateo.io/v0-0-1
         verb: POST
         resource: crdgenbugtests
+        payloadToOverride:
+        - name: metadata.name
+          value: ${ argocd.namespace }
+        - name: metadata.namespace
+          value: ${ "crdgen-bug-test-system" }
   app:
     template:
       schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-0-1") | .schema.openAPIV3Schema.properties.spec.properties }
