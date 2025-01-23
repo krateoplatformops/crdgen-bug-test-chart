@@ -1,0 +1,82 @@
+apiVersion: v1
+data:
+  panel: "true"
+kind: ConfigMap
+metadata:
+  name: template-crdgen-bug-test-card
+  namespace: crdgen-bug-test-system
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: Widget
+metadata:
+  name: template-crdgen-bug-test-card
+  namespace: crdgen-bug-test-system
+spec:
+  actions:
+  - template:
+      apiVersion: templates.krateo.io/v1alpha1
+      name: template-crdgen-bug-test-customform
+      namespace: crdgen-bug-test-system
+      resource: customforms
+      verb: GET
+  - template:
+      apiVersion: core.krateo.io/v1alpha1
+      name: crdgen-bug-test
+      namespace: crdgen-bug-test-system
+      resource: compositiondefinitions
+      verb: DELETE
+  app:
+    template:
+      color: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | if .status == "False" then "orange" elif .status == "True" then "green" else "grey" end }
+      content: This is a card for crdgen bug test template (custom form)
+      icon: fa-cubes
+      tags: crdgen-bug-test-system,0.0.1
+      title: FireworksApp
+      status: ${ .getCompositionDefinition.status.conditions[] | select(.type == "Ready") | "Ready:" + .status }
+      date: ${ .getCompositionDefinition.metadata.creationTimestamp }
+  propsRef:
+    name: template-crdgen-bug-test-card
+    namespace: crdgen-bug-test-system
+  type: card
+  api:
+  - name: getCompositionDefinition
+    path: "/apis/core.krateo.io/v1alpha1/namespaces/crdgen-bug-test-system/compositiondefinitions/crdgen-bug-test"
+    verb: GET
+    headers:
+    - 'Accept: application/json'
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: template-crdgen-bug-test-customform
+  namespace: crdgen-bug-test-system
+data:
+  onSubmitId: submit
+  onSubmitVerb: POST
+  payloadFormKey: spec
+---
+apiVersion: templates.krateo.io/v1alpha1
+kind: CustomForm
+metadata:
+  name: template-crdgen-bug-test-customform
+  namespace: crdgen-bug-test-system
+spec:
+  type: customform
+  propsRef:
+    name: template-crdgen-bug-test-customform
+    namespace: crdgen-bug-test-system
+  actions:
+    - template:
+        id: submit
+        apiVersion: composition.krateo.io/v0-0-1
+        verb: POST
+        resource: crdgenbugtests
+  app:
+    template:
+      schema: ${ .getCRD | .spec.versions[] | select(.name == "v0-0-1") | .schema.openAPIV3Schema.properties.spec.properties }
+  api:
+  - name: getCRD
+    path: "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/crdgenbugtests.composition.krateo.io"
+    verb: GET
+    headers:
+    - 'Accept: application/json'

@@ -1,0 +1,10 @@
+apiVersion: core.krateo.io/v1alpha1
+kind: CompositionDefinition
+metadata:
+  name: crdgen-bug-test
+  namespace: crdgen-bug-test-system
+spec:
+  chart:
+    repo: crdgen-bug-test
+    url: https://charts.krateo.io
+    version: 0.0.1
