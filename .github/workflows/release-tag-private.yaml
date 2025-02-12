@@ -8,6 +8,10 @@ jobs:
   package:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - name: Extract and Store Trimmed Repository Name
         run: |
@@ -70,8 +74,15 @@ jobs:
       - name: Package Helm Chart
         run: helm package ./chart
 
+      - name: Debug Authentication
+        run: |
+          echo "Actor: ${{ github.actor }}"
+          echo "Repository Owner: ${{ github.repository_owner }}"
+          echo "Token Permissions:"
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com
+
       - name: Login to GitHub Packages
-        run: helm registry login ghcr.io --username ${{ github.actor }} --password ${{ steps.authenticate.outputs.token }}
+        run: helm registry login ghcr.io --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract Chart Name and Version
         id: chart-info
