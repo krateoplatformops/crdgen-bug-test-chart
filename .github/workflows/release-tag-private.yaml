@@ -68,7 +68,7 @@ jobs:
         run: sed -i 's/APP_VERSION/${{ steps.app_version.outputs.tag }}/g' ./chart/Chart.yaml
 
       - name: Package Helm Chart
-        run: helm package .
+        run: helm package ./chart
 
       - name: Login to GitHub Packages
         run: helm registry login ghcr.io --username ${{ github.actor }} --password ${{ steps.authenticate.outputs.token }}
