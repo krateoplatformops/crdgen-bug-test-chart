@@ -1,9 +1,8 @@
-name: release-pullrequest
+name: release-tag-private
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    tags: ["[0-9]+.[0-9]+.[0-9]+"]
 
 jobs:
   package:
@@ -68,8 +67,18 @@ jobs:
       - name: Replace App Version in Chart.yaml
         run: sed -i 's/APP_VERSION/${{ steps.app_version.outputs.tag }}/g' ./chart/Chart.yaml
 
-      - name: Set up Helm
-        uses: azure/setup-helm@v4.1.0
+      - name: Package Helm Chart
+        run: helm package .
 
-      - name: Helm lint
-        run: helm lint ./chart
+      - name: Login to GitHub Packages
+        run: helm registry login ghcr.io --username ${{ github.actor }} --password ${{ steps.authenticate.outputs.token }}
+
+      - name: Extract Chart Name and Version
+        id: chart-info
+        run: |
+          # Extract the .tgz filename dynamically
+          CHART_PACKAGE=$(ls *.tgz)
+          echo "chart_package=${CHART_PACKAGE}" >> $GITHUB_ENV
+
+      - name: Push Helm Chart to GitHub Packages
+        run: helm push ${{ env.chart_package }} oci://ghcr.io/${{ github.repository_owner }}/helm-charts-private
